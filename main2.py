@@ -1,5 +1,5 @@
 import sys
-f = open('input.txt')
+f = open('input2.txt')
 
 NFA = {}
 
@@ -17,10 +17,13 @@ for line in f:
 
     if NFA[table[0]].get(table[1]) == None:
         NFA[table[0]][table[1]] = list()
-    
+
     NFA[table[0]][table[1]].append(table[2])
 
 f.close()
+
+for pair in NFA.items():
+    print(*pair)
 
 word = input('\nCuvantul este: ').strip()
 print()
@@ -31,20 +34,20 @@ path_saver = [[start_state]]
 for letter in word:
     i = 0
     length_current_states = len(current_states)
-    while i < length_current_states: 
+    while i < length_current_states:
         if NFA[current_states[i]].get(letter) == None:
             current_states.pop(i)
             path_saver.pop(i)
             length_current_states -= 1
-        else: 
+        else:
             if len(NFA[current_states[i]][letter]) == 1:
                 current_states[i] = NFA[current_states[i]][letter][0]
                 path_saver[i].append(current_states[i])
                 i += 1
-            else: 
+            else:
                 for possible_state in NFA[current_states[i]][letter]:
                     current_states.append(possible_state)
-                    new_path = [ elem for elem in path_saver[i] ]
+                    new_path = [elem for elem in path_saver[i]]
                     new_path.append(possible_state)
                     path_saver.append(new_path)
                 path_saver.pop(i)
@@ -69,7 +72,8 @@ for i in range(len(current_states)):
 print()
 
 ''' input.txt template
-0 1 4
+0 
+1 4
 0 b 0 
 0 a 1
 0 a 0
